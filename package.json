@@ -53,7 +53,7 @@
         "matter-js": "^0.20.0",
         "matter-wrap": "^0.2.0",
         "nuxt": "^4.4.2",
-        "nuxt-security": "^2.5.1",
+        "nuxt-security": "^2.6.0",
         "pinia": "^3.0.4",
         "reka-ui": "^2.8.0",
         "shadcn-nuxt": "2.4.3",
