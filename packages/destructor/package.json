@@ -1,0 +1,64 @@
+{
+    "name": "@cypher/destructor",
+    "displayName": "Destructor",
+    "version": "0.0.1",
+    "author": {
+        "email": "cypher042@gmail.com",
+        "name": "Cypher",
+        "url": "https://cypher.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Cypher042/web-landing.git",
+        "directory": "packages/destructor"
+    },
+    "bugs": {
+        "url": "https://github.com/Cypher042/web-landing/issues"
+    },
+    "license": "AGPL-3.0",
+    "contributors": [
+        {
+            "name": "Cypher",
+            "email": "cypher042@gmail.com",
+            "url": "https://cypher.com"
+        }
+    ],
+    "maintainers": [
+        {
+            "name": "Cypher",
+            "email": "cypher042@gmail.com",
+            "url": "https://cypher.com"
+        }
+    ],
+    "description": "TypeScript library providing an animated Gravity Gun to blow up your website.",
+    "categories": [
+        "Other"
+    ],
+    "type": "module",
+    "engines": {
+        "bun": ">=1.2.5"
+    },
+    "exports": {
+        ".": {
+            "import": "./main.ts",
+            "default": "./main.ts"
+        },
+        "./styles.css": {
+            "import": "./styles.css",
+            "default": "./styles.css"
+        }
+    },
+    "keywords": [
+        "typescript",
+        "half-life"
+    ],
+    "packageManager": "bun@1.2.5",
+    "dependencies": {
+        "fastdom": "^1.0.12",
+        "matter-js": "^0.20.0",
+        "matter-wrap": "^0.2.0"
+    },
+    "devDependencies": {
+        "@types/matter-js": "^0.20.0"
+    }
+}

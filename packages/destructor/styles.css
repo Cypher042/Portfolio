@@ -1,0 +1,490 @@
+/**
+ * Physics Playground Styles
+ * Adapted from https://www.half-life.com/en/halflife2/20th
+ * Modern CSS with nesting and comprehensive documentation
+ */
+
+/* ========================================
+   Mobile Message Component
+   ======================================== */
+
+/**
+ * Mobile touch message that appears when users try to interact
+ * with the gravity gun on touch devices
+ */
+.destructor-mobile-message {
+    text-align: center;
+    font-size: 100%;
+    margin-top: -1em;
+    pointer-events: none;
+    transition: opacity 0.3s ease-out;
+    line-height: 1em;
+    min-height: 1em;
+
+    /* Hide all message variants by default */
+    span {
+        display: none;
+    }
+}
+
+/* Hide mobile message when not in gravity gun message mode */
+body:not(.physics-handle-message) {
+    .destructor-mobile-message {
+        opacity: 0;
+    }
+}
+
+/* ========================================
+   Physics Container & Canvas
+   ======================================== */
+
+/**
+ * Main physics container that holds all physics-enabled elements
+ * Fixed positioned to cover entire viewport
+ */
+.physics-container {
+    pointer-events: none;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9001; /* Above most content but below debug UI */
+}
+
+/**
+ * Matter.js physics debug canvas
+ * Only visible when physics debugging is enabled
+ */
+.physics-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 10000; /* Above physics container */
+
+    /* Hide canvas unless debugging physics */
+    body:not(.debug-physics) & {
+        visibility: hidden;
+    }
+}
+
+/* ========================================
+   Physics Elements & Placeholders
+   ======================================== */
+
+/**
+ * Base styles for physics-enabled elements
+ * Elements that can be extracted from the DOM and made interactive
+ */
+.physics-element {
+    pointer-events: all !important;
+    contain: layout; /* Optimize layout performance */
+
+    /**
+     * Extractable state - when element can be picked up
+     * Applies hover effects and prevents text selection
+     */
+    &.extractable {
+        transition: all 0.2s ease-out;
+        user-select: none;
+        -webkit-user-select: none; /* Safari compatibility */
+
+        &:hover {
+            filter: drop-shadow(0px 2px 5px rgba(0, 0, 0, 0.3)) !important;
+        }
+    }
+
+    /**
+     * Extracted state - when element is in physics simulation
+     * Removes transitions for smooth physics movement
+     */
+    &.extracted {
+        transition: none !important;
+
+        /* Reset cursor when gravity gun not equipped */
+        body:not(.physics-handle-equipped) &,
+        body:not(.physics-handle-equipped) & * {
+            cursor: default !important;
+        }
+    }
+
+    /* Debug outline for non-extracted elements */
+    body.physics-debug-page-elements &:not(.extracted) {
+        outline: dotted 2px magenta;
+    }
+
+    /* Hide visible placeholder elements when not debugging */
+    body:not(.physics-debug-page-elements) &.visible-placeholder,
+    body:not(.physics-debug-page-elements) &.visible-placeholder * {
+        visibility: hidden !important;
+    }
+}
+
+/**
+ * Placeholder elements that replace extracted physics elements
+ * Maintain layout while original element is in physics simulation
+ */
+.physics-placeholder {
+    pointer-events: none !important;
+
+    /* Apply to all descendants */
+    & * {
+        pointer-events: none !important;
+    }
+
+    /* Hide placeholders unless debugging */
+    body:not(.physics-debug-page-elements) &:not(.visible-placeholder),
+    body:not(.physics-debug-page-elements) &:not(.visible-placeholder) * {
+        visibility: hidden !important;
+    }
+
+    /* Semi-transparent when debugging */
+    body.physics-debug-page-elements & {
+        opacity: 0.3 !important;
+    }
+}
+
+/**
+ * Media placeholder styling for extracted images/videos
+ * Uses a pixelated pattern to indicate missing media
+ */
+.physics-media-placeholder {
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAIAAAD91JpzAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAAQSURBVBhXY/gPhBDwn+E/ABvyA/1Bas9NAAAAAElFTkSuQmCC") !important;
+    background-size: 20px 20px !important;
+    image-rendering: pixelated !important;
+}
+
+/* ========================================
+   Global Body States
+   ======================================== */
+
+/**
+ * Global cursor override when gravity gun is equipped
+ * Hides all cursors to show custom gravity gun cursor
+ */
+body.physics-handle-equipped,
+body.physics-handle-equipped * {
+    cursor: none !important;
+
+    /* Disable footer interactions when gun is equipped */
+    footer {
+        pointer-events: none;
+    }
+}
+
+/**
+ * Prevent text selection when physics bodies are active
+ * Improves interaction experience during physics simulation
+ */
+body.has-physics-bodies {
+    user-select: none;
+    -webkit-user-select: none; /* Safari compatibility */
+}
+
+/**
+ * Debug UI visibility controls
+ * Hide debug panels unless explicitly enabled
+ */
+body:not(.show-physics-debug-ui) .physdebug {
+    display: none;
+}
+
+body:not(.showSoundDebugUI) .sounddebug {
+    display: none;
+}
+
+/* ========================================
+   Gravity Gun Button
+   ======================================== */
+
+/**
+ * Main gravity gun container
+ * Centers the gun button in its parent
+ */
+.handle {
+    margin: auto;
+    width: 90%;
+    max-width: 90%;
+}
+
+/**
+ * Gravity gun button with state-based background images
+ * Uses Half-Life 2 gravity gun sprites from Steam CDN
+ */
+.handle-image {
+    background-image: url("https://cdn.fastly.steamstatic.com/half-life.com/images/halflife220/gravgun-outline.png");
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin: auto;
+    width: 180px;
+    height: 155px;
+    transition-property: transform, background-image;
+    transition-duration: 150ms;
+    transition-timing-function: ease-in-out;
+
+    /* Hover state for unequipped gun */
+    &:hover {
+        background-image: url("https://cdn.fastly.steamstatic.com/half-life.com/images/halflife220/gravgun-hover.png");
+        transition-duration: 0ms;
+    }
+
+    /* Equipped state styling */
+    .handle.handle-equipped &,
+    &.equipped {
+        background-image: url("https://cdn.fastly.steamstatic.com/half-life.com/images/halflife220/gravgun-inset.png");
+
+        &:hover {
+            background-image: url("https://cdn.fastly.steamstatic.com/half-life.com/images/halflife220/gravgun-inset-hover.png");
+        }
+    }
+
+    /* Wiggle animation for touch message */
+    &.handle-wiggle {
+        animation: handle-wiggle 0.5s ease-in-out 1;
+    }
+
+    /* Force hover state during touch message */
+    body.physics-handle-message & {
+        background-image: url("https://cdn.fastly.steamstatic.com/half-life.com/images/halflife220/gravgun-hover.png");
+        transition-duration: 0ms;
+    }
+}
+
+/* ========================================
+   Gravity Gun Animations
+   ======================================== */
+
+/**
+ * Wiggle animation for button interaction feedback
+ * Alternates rotation to create attention-grabbing effect
+ */
+@keyframes handle-wiggle {
+    0%,
+    100% {
+        transform: rotate(0deg);
+    }
+    10% {
+        transform: rotate(10deg);
+    }
+    30% {
+        transform: rotate(-10deg);
+    }
+    50% {
+        transform: rotate(10deg);
+    }
+    70% {
+        transform: rotate(-10deg);
+    }
+    90% {
+        transform: rotate(10deg);
+    }
+}
+
+/**
+ * Recoil animation for gravity gun firing
+ * Scales and rotates to simulate weapon kickback
+ */
+@keyframes handle-recoil {
+    0%,
+    100% {
+        transform: rotateZ(0deg) scale(1);
+    }
+    10% {
+        transform: rotateZ(0deg) scale(1.05);
+    }
+    20% {
+        transform: rotateZ(2deg) scale(1.05);
+    }
+    40% {
+        transform: rotateZ(-2deg) scale(1.05);
+    }
+}
+
+/**
+ * Flickering animation for gravity gun energy beam
+ * Uses CSS custom properties for configurable intensity
+ */
+@keyframes handle-flicker {
+    0%,
+    100% {
+        opacity: calc(
+            (var(--flicker-min) + (0.27 * var(--flicker-magnitude))) *
+            var(--flicker-scalar)
+        );
+    }
+    8% {
+        opacity: calc(
+            (var(--flicker-min) + (0.64 * var(--flicker-magnitude))) *
+            var(--flicker-scalar)
+        );
+    }
+    18% {
+        opacity: calc(
+            (var(--flicker-min) + (0.27 * var(--flicker-magnitude))) *
+            var(--flicker-scalar)
+        );
+    }
+    31% {
+        opacity: calc(
+            (var(--flicker-min) + (1 * var(--flicker-magnitude))) *
+            var(--flicker-scalar)
+        );
+    }
+    35% {
+        opacity: calc(
+            (var(--flicker-min) + (0 * var(--flicker-magnitude))) *
+            var(--flicker-scalar)
+        );
+    }
+    49% {
+        opacity: calc(
+            (var(--flicker-min) + (0.55 * var(--flicker-magnitude))) *
+            var(--flicker-scalar)
+        );
+    }
+    59% {
+        opacity: calc(
+            (var(--flicker-min) + (0.27 * var(--flicker-magnitude))) *
+            var(--flicker-scalar)
+        );
+    }
+    56% {
+        opacity: calc(
+            (var(--flicker-min) + (0.64 * var(--flicker-magnitude))) *
+            var(--flicker-scalar)
+        );
+    }
+    78% {
+        opacity: calc(
+            (var(--flicker-min) + (0.09 * var(--flicker-magnitude))) *
+            var(--flicker-scalar)
+        );
+    }
+    88% {
+        opacity: calc(
+            (var(--flicker-min) + (0.64 * var(--flicker-magnitude))) *
+            var(--flicker-scalar)
+        );
+    }
+    92% {
+        opacity: calc(
+            (var(--flicker-min) + (0.82 * var(--flicker-magnitude))) *
+            var(--flicker-scalar)
+        );
+    }
+}
+
+/* ========================================
+   Held Gravity Gun (Cursor)
+   ======================================== */
+
+/**
+ * Container for the held gravity gun that follows the cursor
+ * Positioned to center the gun sprite on the mouse cursor
+ */
+.handle-held-container {
+    width: 150px;
+    height: 150px;
+    position: fixed;
+    top: -60px; /* Offset to center gun on cursor */
+    left: -70px; /* Offset to center gun on cursor */
+    pointer-events: none;
+    z-index: 9002; /* Above physics container */
+}
+
+/**
+ * The actual held gravity gun element with energy beam effects
+ * Uses pseudo-elements for energy beam and gun sprite
+ */
+.handle-held {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    /* Hide when not equipped */
+    &:not(.equipped) {
+        display: none;
+    }
+
+    /* Apply recoil animation */
+    &.recoil {
+        animation: handle-recoil 0.5s 1;
+    }
+
+    /**
+     * Energy beam effect (::before pseudo-element)
+     * Creates an animated orange energy glow
+     */
+    &::before {
+        content: "";
+        background: radial-gradient(
+            circle,
+            rgba(255, 212, 53, 1) 0%,
+            rgba(255, 147, 32, 0.6) 10%,
+            rgba(255, 140, 6, 0.3) 38%,
+            rgba(255, 132, 0, 0) 59%
+        );
+        z-index: 0;
+        display: block;
+        width: 50px;
+        height: 50px;
+        position: relative;
+        top: 37px;
+        left: 41px;
+        transform: scale(1.8);
+        transition: all 0.1s ease-in-out;
+
+        /* Flickering animation variables */
+        --flicker-min: 0.75;
+        --flicker-magnitude: 0.25;
+        --flicker-scalar: 0.5;
+        animation: handle-flicker 1.4s infinite;
+    }
+
+    /**
+     * Enhanced energy beam when hovering over items
+     */
+    &.hovering-over-item::before {
+        transform: scale(2.2);
+        --flicker-scalar: 0.8;
+    }
+
+    /**
+     * Maximum energy beam when holding items
+     */
+    &.holding-item::before {
+        transform: scale(2.5);
+        --flicker-scalar: 1;
+        animation-duration: 0.8s;
+    }
+
+    /**
+     * Gravity gun sprite (::after pseudo-element)
+     * Shows different sprites based on interaction state
+     */
+    &::after {
+        content: "";
+        background-image: url("https://cdn.fastly.steamstatic.com/half-life.com/images/halflife220/gravgun_vm_close.png");
+        background-size: contain;
+        background-repeat: no-repeat;
+        z-index: 1;
+        display: block;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+    }
+
+    /**
+     * Open gravity gun sprite when hovering over grabbable items
+     */
+    &.hovering-over-item::after {
+        background-image: url("https://cdn.fastly.steamstatic.com/half-life.com/images/halflife220/gravgun_vm_open.png");
+    }
+}

@@ -1,0 +1,30 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#111827"></stop>
+      <stop offset="100%" stop-color="#2563EB"></stop>
+    </linearGradient>
+  </defs>
+
+  <!-- Hexagon -->
+  <polygon points="256,60 396,140 396,300 256,380 116,300 116,140" fill="none" stroke="url(#g)" stroke-width="18" stroke-linejoin="round"></polygon>
+
+  <!-- A -->
+  <path d="M256 130 L180 300 M256 130 L332 300" stroke="url(#g)" stroke-width="20" stroke-linecap="round" fill="none"></path>
+
+  <line x1="215" y1="235" x2="297" y2="235" stroke="url(#g)" stroke-width="20" stroke-linecap="round"></line>
+
+  <!-- C -->
+  <path d="M340 175
+       C300 145,240 145,205 190
+       C170 235,170 285,205 330
+       C240 375,300 375,340 345" fill="none" stroke="url(#g)" stroke-width="16" stroke-linecap="round"></path>
+
+  <!-- Network Nodes -->
+  <circle cx="256" cy="60" r="10" fill="#2563EB"></circle>
+  <circle cx="396" cy="140" r="10" fill="#2563EB"></circle>
+  <circle cx="396" cy="300" r="10" fill="#2563EB"></circle>
+  <circle cx="256" cy="380" r="10" fill="#2563EB"></circle>
+  <circle cx="116" cy="300" r="10" fill="#2563EB"></circle>
+  <circle cx="116" cy="140" r="10" fill="#2563EB"></circle>
+</svg>
