@@ -25,7 +25,7 @@
                     </p>
                     <div class="sm:w-80 sm:shrink lg:w-auto lg:flex-none">
                         <p class="text-lg font-semibold tracking-tight">
-                            Commits per year
+                            Commits
                         </p>
                         <p
                             class="mt-2 text-base leading-7 text-secondary-foreground"
